@@ -25,7 +25,15 @@ app.get('/zmanim', (req, res) => {
         return res.status(400).json({ error: 'No se pudo determinar la zona horaria.' });
     }
 
-    const dateObj = date ? new Date(date) : new Date();
+    // ✅ Corrección aquí: convertir la fecha a una hora local controlada
+    let dateObj;
+    if (date) {
+        const [year, month, day] = date.split('-').map(Number);
+        dateObj = moment.tz({ year, month: month - 1, day, hour: 12 }, timeZone).toDate(); // hora fija para evitar desplazamiento
+    } else {
+        dateObj = moment().tz(timeZone).toDate();
+    }
+
     const times = SunCalc.getTimes(dateObj, latNum, lngNum);
 
     const sunrise = times.sunrise;
