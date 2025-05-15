@@ -35,9 +35,9 @@ app.get('/zmanim', (req, res) => {
     }
 
     const times = SunCalc.getTimes(dateObj, latNum, lngNum);
+    const sunrise = new Date(times.sunrise.getTime() - 60 * 1000);
+    const sunset = new Date(times.sunset.getTime() - 60 * 1000);
 
-    const sunrise = times.sunrise;
-    const sunset = times.sunset;
 
     const dayLengthMs = sunset - sunrise;
     const shaahZmanit = dayLengthMs / 12;
